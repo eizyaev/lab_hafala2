@@ -674,6 +674,10 @@ int do_fork(unsigned long clone_flags, unsigned long stack_start,
 	p->tty_old_pgrp = 0;
 	p->times.tms_utime = p->times.tms_stime = 0;
 	p->times.tms_cutime = p->times.tms_cstime = 0;
+	
+	/* TODO queue doesn't inherit */
+	INIT_LIST_HEAD(&p->TODO_queue.list);
+
 #ifdef CONFIG_SMP
 	{
 		int i;

@@ -1,0 +1,10 @@
+#!/bin/bash
+src_path="/usr/src/linux-2.4.18-14custom"
+cp sched.h $src_path/include/linux/sched.h
+cp fork.c $src_path/kernel/fork.c
+cp exit.c $src_path/kernel/exit.c
+cp entry.S $src_path/arch/i386/kernel/entry.S
+cp syscall.h $src_path/include/linux/syscall.h
+cp TODO_syscalls.c $src_path/kernel/TODO_syscalls.c
+cp Makefile $src_path/kernel/Makefile
+cp todo_api.h $src_path/todo_api.h

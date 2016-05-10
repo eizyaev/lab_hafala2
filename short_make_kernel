@@ -1,0 +1,13 @@
+#!/bin/bash
+src_path="/usr/src/linux-2.4.18-14custom"
+cd $src_path
+echo "make bzImage"
+make bzImage || exit 1
+echo make install
+make install || exit 1
+cd /boot
+echo "mkinitrd -f 2.4.18-14custom.img 2.4.18-14custom"
+mkinitrd -f 2.4.18-14custom.img 2.4.18-14custom || exit 1
+echo "reboot"
+reboot || exit 1
+

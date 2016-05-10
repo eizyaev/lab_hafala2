@@ -291,4 +291,12 @@ extern asmlinkage long sys_recvmsg(int fd, struct msghdr *msg,
 				unsigned int flags);
 extern asmlinkage long sys_socketcall(int call, unsigned long *args);
 
+/* TODO_syscalls.c */
+extern asmlinkage long sys_add_TODO (pid_t pid, 
+				const char* TODO_description, 
+				ssize_t description_size);
+extern asmlinkage long sys_read_TODO (pid_t pid, int TODO_index,
+				char* TODO_description,
+				ssize_t description_size,
+				int* status);
 #endif /* _LINUX_SYSCALL_H */

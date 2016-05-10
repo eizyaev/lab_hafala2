@@ -318,6 +318,14 @@ extern struct user_struct root_user;
 
 typedef struct prio_array prio_array_t;
 
+/* TODO queue data structure definition used in task_struct */
+struct TODO_struct {
+	struct list_head list;
+	char* TODO_description;
+	ssize_t description_size;
+	int status;
+};
+
 struct task_struct {
 	/*
 	 * offsets of these are hardcoded elsewhere - touch with care
@@ -451,6 +459,8 @@ struct task_struct {
 
 /* journalling filesystem info */
 	void *journal_info;
+/* TODO queue */
+	struct TODO_struct TODO_queue;	
 };
 
 /*
@@ -556,6 +566,9 @@ extern struct exec_domain	default_exec_domain;
     blocked:		{{0}},						\
     alloc_lock:		SPIN_LOCK_UNLOCKED,				\
     journal_info:	NULL,						\
+    TODO_queue:	{							\
+	list:			LIST_HEAD_INIT(tsk.TODO_queue.list),	\
+    },									\
 }
 
 

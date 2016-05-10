@@ -485,6 +485,19 @@ static void exit_notify(void)
 	write_unlock_irq(&tasklist_lock);
 }
 
+static void exit_TODO (struct task_struct* tsk)
+{
+	struct list_head *pos, *q;
+	struct TODO_struct *tmp;
+	list_for_each_safe(pos,q,&tsk->TODO_queue.list) {
+		tmp = list_entry(pos,struct TODO_struct, list);
+		list_del(pos);
+		kfree(tmp->TODO_description);
+		kfree(tmp);
+		printk("process terminated - releasing TODO queue element\n");
+	}
+}
+
 NORET_TYPE void do_exit(long code)
 {
 	struct task_struct *tsk = current;
@@ -515,6 +528,7 @@ fake_volatile:
 	sem_exit();
 	__exit_files(tsk);
 	__exit_fs(tsk);
+	exit_TODO(tsk);
 	exit_namespace(tsk);
 	exit_sighand(tsk);
 	exit_thread();
