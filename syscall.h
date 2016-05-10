@@ -299,4 +299,6 @@ extern asmlinkage long sys_read_TODO (pid_t pid, int TODO_index,
 				char* TODO_description,
 				ssize_t description_size,
 				int* status);
+extern asmlinkage long sys_mark_TODO (pid_t pid, int TODO_index,
+                int status);
 #endif /* _LINUX_SYSCALL_H */

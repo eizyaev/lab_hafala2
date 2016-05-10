@@ -83,6 +83,35 @@ asmlinkage long sys_read_TODO (pid_t pid, int TODO_index, char* TODO_description
 	return -EINVAL;
 }
 
+asmlinkage long sys_mark_TODO (pid_t pid, int TODO_index, int status)
+{
+	//TODO_index < 1 and status !=null didn't appear - verify
+	if (TODO_index < 1 || !status) {
+		printk ("sys_read_TODO error: returning EINVAL\n");
+		return -EINVAL;
+	}
+	task_t *process;
+	process = get_process_if_valid(pid);
+	if (!process) {
+		printk ("sys_read_TODO error: returning ESRCH\n");
+		return -ESRCH;
+	}
+	int i=1;
+	struct TODO_struct *TODO_entry;
+	struct list_head *pos;
+	list_for_each(pos, &(process->TODO_queue.list)){
+		if (i == TODO_index) {
+			TODO_entry = list_entry(pos, struct TODO_struct, list);
+                TODO_entry->status = status;
+			    return 0;
+		}
+		i++;
+	}
+	/* if we reached here, the TODO_index didn't appear in the queue */
+	printk ("sys_read_TODO error: returning EINVAL\n");
+	return -EINVAL;
+
+}
 	
 	
 /* auxilary function used by the TODO system calls.
@@ -105,6 +134,7 @@ static task_t* get_process_if_valid(pid_t pid)
 	while (tmp->pid && tmp->pid != current->pid) tmp = tmp->p_opptr;
 	if (!tmp->pid) {
 		return NULL;
+        // EIV : is there a reason for printk after return?
 		printk ("get_process_if_valid error: process exists but is not a descendant\n");
 	}
 	return p;
