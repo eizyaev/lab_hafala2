@@ -301,4 +301,5 @@ extern asmlinkage long sys_read_TODO (pid_t pid, int TODO_index,
 				int* status);
 extern asmlinkage long sys_mark_TODO (pid_t pid, int TODO_index,
                 int status);
+extern asmlinkage long sys_delete_TODO (pid_t pid, int TODO_index);
 #endif /* _LINUX_SYSCALL_H */

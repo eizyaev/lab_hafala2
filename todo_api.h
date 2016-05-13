@@ -102,4 +102,31 @@ int mark_TODO (pid_t pid, int TODO_index, int status)
 	return (int)res;
 }
 
+int delete_TODO (pid_t pid, int TODO_index)
+{
+	int res;
+	__asm__
+	(
+		"pushl %%eax;"
+		"pushl %%ebx;"
+		"pushl %%ecx;"
+		"movl $246, %%eax;"
+		"movl %1, %%ebx;"
+		"movl %2, %%ecx;"
+		"int $0x80;"
+		"movl %%eax, %0;"
+		"popl %%ecx;"
+		"popl %%ebx;"
+		"popl %%eax;"
+		:"=m" (res)
+		:"m" (pid), "m" (TODO_index)
+	);
+	if (res) {
+		errno = res;
+		res = -1;
+	}
+	printf("delete wrapper debug return: res=%d, pid=%d, TODO_index=%d\n",res,pid,TODO_index);
+	return (int)res;
+}
+
 #endif //_TODO_API_H

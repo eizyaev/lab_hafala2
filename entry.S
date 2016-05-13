@@ -652,7 +652,7 @@ ENTRY(sys_call_table)
 	.long SYMBOL_NAME(sys_add_TODO)
 	.long SYMBOL_NAME(sys_read_TODO)
 	.long SYMBOL_NAME(sys_mark_TODO)	/* 245 */
-	//.long SYMBOL_NAME(sys_delete_TODO)
+	.long SYMBOL_NAME(sys_delete_TODO)
 
 	.rept NR_syscalls-(.-sys_call_table)/4
 		.long SYMBOL_NAME(sys_ni_syscall)
