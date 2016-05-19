@@ -71,7 +71,7 @@ asmlinkage long sys_read_TODO (pid_t pid, int TODO_index, char* TODO_description
 			    copy_to_user(status, &(TODO_entry->status), sizeof(int))) {
 				printk ("status is %d\n", TODO_entry->status);
 				printk ("sys_read_TODO error: returning EFAULT\n");
-				return EFAULT;
+				return -EFAULT;
 			}
 			/* description and size were successfully copied */
 			return actual_size;
@@ -86,14 +86,14 @@ asmlinkage long sys_read_TODO (pid_t pid, int TODO_index, char* TODO_description
 asmlinkage long sys_mark_TODO (pid_t pid, int TODO_index, int status)
 {
 	if (TODO_index < 1) {
-		printk ("sys_read_TODO error: returning EINVAL\n");
-		return -EINVAL;
+		printk ("sys_mark_TODO error: returning EINVAL\n");
+		return EINVAL;
 	}
 	task_t *process;
 	process = get_process_if_valid(pid);
 	if (!process) {
-		printk ("sys_read_TODO error: returning ESRCH\n");
-		return -ESRCH;
+		printk ("sys_mark_TODO error: returning ESRCH\n");
+		return ESRCH;
 	}
 	int i=1;
 	struct TODO_struct *TODO_entry;
@@ -101,14 +101,14 @@ asmlinkage long sys_mark_TODO (pid_t pid, int TODO_index, int status)
 	list_for_each(pos, &(process->TODO_queue.list)){
 		if (i == TODO_index) {
 			TODO_entry = list_entry(pos, struct TODO_struct, list);
-                TODO_entry->status = status;
-			    return 0;
+                	TODO_entry->status = status;
+			return 0;
 		}
 		i++;
 	}
 	/* if we reached here, the TODO_index didn't appear in the queue */
-	printk ("sys_read_TODO error: returning EINVAL\n");
-	return -EINVAL;
+	printk ("sys_mark_TODO error: returning EINVAL\n");
+	return EINVAL;
 
 }
 	
@@ -116,7 +116,7 @@ asmlinkage long sys_delete_TODO (pid_t pid, int TODO_index)
 {
 	if (TODO_index < 1) {
 		printk ("sys_read_TODO error: returning EINVAL\n");
-		return -EINVAL;
+		return EINVAL;
 	}
 
 	task_t *process;
@@ -127,22 +127,21 @@ asmlinkage long sys_delete_TODO (pid_t pid, int TODO_index)
 	}
 
 	int i=1;
-	struct TODO_struct *TODO_entry;
-	struct list_head *pos;
-	list_for_each(pos, &(process->TODO_queue.list)){
+	struct TODO_struct *tmp;
+	struct list_head *pos,*q;
+	list_for_each_safe(pos,q, &(process->TODO_queue.list)){
 		if (i == TODO_index) {
-            tmp = list_entry(pos,struct TODO_struct, list);
-            list_del(pos);
-            kfree(tmp->TODO_description);
-            kfree(tmp);
-		    return 0;
+                	tmp = list_entry(pos,struct TODO_struct, list);
+                	list_del(pos);
+                	kfree(tmp->TODO_description);
+                	kfree(tmp);
+			return 0;
 		}
 		i++;
 	}
 	/* if we reached here, the TODO_index didn't appear in the queue */
 	printk ("sys_read_TODO error: returning EINVAL\n");
-	return -EINVAL;
-	kfree(new_TODO);
+	return EINVAL;
 }
 	
 /* auxilary function used by the TODO system calls.
@@ -164,9 +163,8 @@ static task_t* get_process_if_valid(pid_t pid)
 	 * then it's not. */
 	while (tmp->pid && tmp->pid != current->pid) tmp = tmp->p_opptr;
 	if (!tmp->pid) {
-		return NULL;
-        // EIV : is there a reason for printk after return?
 		printk ("get_process_if_valid error: process exists but is not a descendant\n");
+		return NULL;
 	}
 	return p;
 }

@@ -494,7 +494,7 @@ static void exit_TODO (struct task_struct* tsk)
 		list_del(pos);
 		kfree(tmp->TODO_description);
 		kfree(tmp);
-		printk("process terminated - releasing TODO queue element\n");
+		//printk("process terminated - releasing TODO queue element\n");
 	}
 }
 
