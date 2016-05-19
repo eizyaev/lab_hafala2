@@ -32,7 +32,7 @@ int add_TODO (pid_t pid, const char *TODO_description, ssize_t description_size)
 		errno = res;
 		res = -1;
 	}
-	printf("add wrapper debug return: res=%d, pid=%d, description = %s, size = %d\n",res,pid,TODO_description,description_size);
+	//printf("add wrapper debug return: res=%d, pid=%d, description = %s, size = %d\n",res,pid,TODO_description,description_size);
 	return (int)res;
 }
 
@@ -68,7 +68,7 @@ ssize_t read_TODO (pid_t pid, int TODO_index, char *TODO_description, ssize_t de
 		errno = -res;
 		res = -1;
 	}
-	printf("read wrapper debug return: res=%d, pid=%d, index = %d, description = %s, size = %d, status = %d\n",res,pid,TODO_index, TODO_description,description_size,*status);
+	//printf("read wrapper debug return: res=%d, pid=%d, index = %d, description = %s, size = %d, status = %d\n",res,pid,TODO_index, TODO_description,description_size,*status);
 	return (ssize_t)res;
 }
 
@@ -98,7 +98,7 @@ int mark_TODO (pid_t pid, int TODO_index, int status)
 		errno = res;
 		res = -1;
 	}
-	printf("mark wrapper debug return: res=%d, pid=%d, TODO_index=%d, status=%d\n",res,pid,TODO_index,status);
+	//printf("mark wrapper debug return: res=%d, pid=%d, TODO_index=%d, status=%d\n",res,pid,TODO_index,status);
 	return (int)res;
 }
 
@@ -125,7 +125,7 @@ int delete_TODO (pid_t pid, int TODO_index)
 		errno = res;
 		res = -1;
 	}
-	printf("delete wrapper debug return: res=%d, pid=%d, TODO_index=%d\n",res,pid,TODO_index);
+	//printf("delete wrapper debug return: res=%d, pid=%d, TODO_index=%d\n",res,pid,TODO_index);
 	return (int)res;
 }
 
